@@ -35,17 +35,19 @@ PRODUCT_COPY_FILES += \
 	device/oppo/msm8974-common/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
 	device/oppo/msm8974-common/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/wifi/WCNSS_qcom_wlan_nv.bin
 
-
 PRODUCT_COPY_FILES += \
+	device/oneplus/bacon/configs-ubuntu/fstab.bacon:root/fstab.bacon\
 	device/oneplus/bacon/configs-ubuntu/init.bacon.rc:root/init.bacon.rc \
-	device/oneplus/bacon/configs-ubuntu/init.qcom.usb.rc:root/init.qcom.usb.rc \
-	device/oneplus/bacon/configs-ubuntu/fstab.bacon:root/fstab.bacon \
-	device/oneplus/bacon/configs-ubuntu/ueventd.qcom.rc:root/ueventd.qcom.rc \
-	device/oneplus/bacon/configs-ubuntu/init.qcom-common.rc:root/init.qcom-common.rc \
-	device/oneplus/bacon/configs-ubuntu/init.qcom.bt.sh:root/init.qcom.bt.sh \
-	device/oneplus/bacon/configs-ubuntu/ueventd.qcom.rc:root/ueventd.qcom.rc \
-	device/oneplus/bacon/configs-ubuntu/init_wlan.sh:root/etc/init_wlan.sh \
-	device/oneplus/bacon/configs-ubuntu/init.qcom.bt.sh:root/etc/init.qcom.bt.sh
+	device/oneplus/bacon/configs-ubuntu/init.qcom-common.rc:root/init.qcom-common.rc
+#	device/oneplus/bacon/configs-ubuntu/init_wlan.sh:root/etc/init_wlan.sh \
+#	device/oneplus/bacon/configs-ubuntu/init.bacon.wifi.sh:root/etc/init.bacon.wifi.sh
+
+#	device/oneplus/bacon/configs-ubuntu/init.qcom.usb.rc:root/init.qcom.usb.rc
+#	device/oneplus/bacon/configs-ubuntu/ueventd.qcom.rc:root/ueventd.qcom.rc \
+#	device/oneplus/bacon/configs-ubuntu/init.qcom.bt.sh:root/init.qcom.bt.sh \
+#	device/oneplus/bacon/configs-ubuntu/ueventd.qcom.rc:root/ueventd.qcom.rc \
+
+#	device/oneplus/bacon/configs-ubuntu/init.qcom.bt.sh:root/etc/init.qcom.bt.sh
 
 
 # Audio
@@ -76,8 +78,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.default_network=10
 
-PRODUCT_PACKAGES += \
-	conn_init
 
 # call the proprietary setup
 $(call inherit-product-if-exists, vendor/oneplus/bacon/bacon-vendor.mk)

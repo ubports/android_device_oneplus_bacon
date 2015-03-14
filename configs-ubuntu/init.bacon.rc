@@ -1,5 +1,5 @@
 #
-# Copyright 2014 The CyanogenMod Project
+# Copyright 2014 The UBports Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-import /init.qcom-common.rc
+ import /init.qcom-common.rc
 
 on fs
     mount_all ./fstab.bacon
@@ -40,9 +40,6 @@ on init
     symlink /storage/emulated/legacy /mnt/sdcard
     symlink /storage/emulated/legacy /storage/sdcard0
     symlink /mnt/shell/emulated/0 /storage/emulated/legacy
-
-on post-fs
-    export_rc /system/etc/init.cne.rc
 
 on post-fs-data
     # Torch

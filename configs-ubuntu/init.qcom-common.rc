@@ -164,14 +164,9 @@ on post-fs-data
     mkdir /persist/sensors 0775 system root
     write /persist/sensors/sensors_settings 1
     chmod 0644 /persist/sensors/sensors_settings
-    chown system.root /persist/sensors/sensors_settings
+    chown system root /persist/sensors/sensors_settings
     mkdir /data/misc/sensors 0775 system system
     restorecon_recursive /data/misc/sensors
-
-    mkdir /data/misc/wifi/prima 0775 wifi wifi
-    mkdir -p /data/misc/wifi/prima
-    cp /persist/WCNSS_* /data/misc/wifi/prima
-    cp /system/etc/wifi/* /data/misc/wifi/
 
     # Create the directories used by the Wireless subsystem
     mkdir /data/misc/wifi 0770 wifi wifi
@@ -183,19 +178,14 @@ on post-fs-data
     restorecon /data/fdAlbum
 
     # Create the directories used by CnE subsystem
-    # mkdir /data/connectivity 0771 system system
-    # chown system system /data/connectivity
-    # restorecon_recursive /data/connectivity
+    mkdir /data/connectivity 0771 system system
+    chown system system /data/connectivity
+    restorecon_recursive /data/connectivity
 
-    # mkdir /data/connectivity/nsrm 0771 system system
-    # chown system system /data/connectivity/nsrm
+    mkdir /data/connectivity/nsrm 0771 system system
+    chown system system /data/connectivity/nsrm
 
-    write /dev/wcnss_wlan 1
-    write /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr 1
 
-    # Workaround for conn_init not copying the updated firmware
-    rm /data/misc/wifi/WCNSS_qcom_cfg.ini
-    rm /data/misc/wifi/WCNSS_qcom_wlan_nv.bin
 
     #Create directories for Location services
     mkdir /data/misc/location 0770 gps gps
@@ -232,8 +222,21 @@ on post-fs-data
     chown system system /sys/devices/virtual/graphics/fb0/cabc
     chmod 0660 /sys/devices/virtual/graphics/fb0/cabc
 
+    chown system system /sys/devices/virtual/graphics/fb0/sre
+    chmod 0660 /sys/devices/virtual/graphics/fb0/sre
+
+    chown system system /sys/devices/virtual/graphics/fb0/color_enhance
+    chmod 0660 /sys/devices/virtual/graphics/fb0/color_enhance
+
     chown system graphics /sys/devices/virtual/graphics/fb0/panel_calibration
     chmod 0660 /sys/devices/virtual/graphics/fb0/panel_calibration
+
+    chown system system /sys/class/timed_output/vibrator/vtg_level
+    chown system system /sys/class/timed_output/vibrator/vtg_max
+    chown system system /sys/class/timed_output/vibrator/vtg_min
+    chmod 0644 /sys/class/timed_output/vibrator/vtg_level
+    chmod 0644 /sys/class/timed_output/vibrator/vtg_max
+    chmod 0644 /sys/class/timed_output/vibrator/vtg_min
 
     setprop vold.post_fs_data_done 1
 
@@ -293,9 +296,9 @@ on property:service.bootanim.exit=1
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 300000
     write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 300000
     write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 300000
-    chown root.system /sys/devices/system/cpu/cpu1/online
-    chown root.system /sys/devices/system/cpu/cpu2/online
-    chown root.system /sys/devices/system/cpu/cpu3/online
+    chown root system /sys/devices/system/cpu/cpu1/online
+    chown root system /sys/devices/system/cpu/cpu2/online
+    chown root system /sys/devices/system/cpu/cpu3/online
     chmod 664 /sys/devices/system/cpu/cpu1/online
     chmod 664 /sys/devices/system/cpu/cpu2/online
     chmod 664 /sys/devices/system/cpu/cpu3/online
@@ -313,14 +316,9 @@ on property:init.svc.bootanim=stopped
     write /sys/devices/system/cpu/cpufreq/interactive/io_is_busy 1
     write /sys/devices/system/cpu/cpufreq/interactive/target_loads "85 1500000:90 1800000:70"
     write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 40000
-    write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 30000
     write /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor 100000
-    write /sys/devices/system/cpu/cpufreq/interactive/sync_freq 1036800
-    write /sys/devices/system/cpu/cpufreq/interactive/up_threshold_any_cpu_load 50
-    write /sys/devices/system/cpu/cpufreq/interactive/up_threshold_any_cpu_freq 1190400
-    write /sys/devices/system/cpu/cpufreq/interactive/timer_slack 20000
 
-    write /sys/module/cpu_boost/parameters/boost_ms 10
+    write /sys/module/cpu_boost/parameters/boost_ms 20
     write /sys/module/cpu_boost/parameters/sync_threshold 1728000
     write /sys/module/cpu_boost/parameters/input_boost_freq 1497600
     write /sys/module/cpu_boost/parameters/input_boost_ms 40
@@ -405,22 +403,6 @@ service wpa_supplicant /system/bin/wpa_supplicant \
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
-
-service conn_init /system/bin/conn_init
-    class late_start
-    user system
-    group system wifi
-    oneshot
-
-service init_wlan /system/bin/sh /system/etc/init_wlan.sh
-    class late_start
-    user root
-    group root
-    disabled
-    oneshot
-
-on property:init.svc.conn_init=stopped
-    start init_wlan
 
 service dhcpcd_wlan0 /system/bin/dhcpcd -aABDKL
     class late_start
@@ -616,11 +598,21 @@ service audiod /system/bin/audiod
    user system
    group system
 
-service wcnss-service /system/bin/wcnss_service
+service wcnss_init /system/bin/sh /system/etc/init.bacon.wifi.sh
     class main
     user system
-    group system wifi qcom_diag radio
+    group system wifi
     oneshot
+
+service init_wlan /system/bin/sh /system/etc/init_wlan.sh
+    class late_start
+    user root
+    group root
+    disabled
+    oneshot
+
+on property:init.svc.wcnss_init=stopped
+    start init_wlan
 
 # GPS
 service gsiff_daemon /system/bin/gsiff_daemon
@@ -636,3 +628,32 @@ service ppd /system/bin/mm-pp-daemon
 
 on property:init.svc.surfaceflinger=stopped
     stop ppd
+
+# diag logging
+service diag_mdlog_start /system/bin/diag_mdlog
+    class late_start
+    user sdcard_rw
+    group system qcom_diag sdcard_rw sdcard_r media_rw
+    disabled
+    oneshot
+
+service diag_mdlog_stop /system/bin/diag_mdlog -k
+    class late_start
+    user sdcard_rw
+    group system qcom_diag sdcard_rw sdcard_r media_rw
+    disabled
+    oneshot
+
+service qlogd /system/xbin/qlogd
+    class main
+    disabled
+on property:persist.sys.qlogd=1
+    start qlogd
+on property:persist.sys.qlogd=0
+    stop qlogd
+
+service ssr_diag /system/bin/ssr_diag
+    class late_start
+    disabled
+    user system
+    group system

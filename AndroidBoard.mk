@@ -9,4 +9,4 @@ include $(CLEAR_VARS)
 #----------------------------------------------------------------------
 # extra images
 #----------------------------------------------------------------------
-#include build/core/generate_extra_images.mk
+# include build/core/generate_extra_images.mk

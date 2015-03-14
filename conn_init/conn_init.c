@@ -29,6 +29,7 @@ static int wifi_check_qcom_cfg_files()
 
     // Read MAC String
     FILE *fp = NULL;
+    int n = 0;
     fp = fopen("/persist/wifi/.macaddr", "r");
     if ( fp == NULL )
     {
@@ -37,7 +38,7 @@ static int wifi_check_qcom_cfg_files()
     }
     else
     {
-        fread(macAddress, 12, 1, fp);
+        n = fread(macAddress, 12, 1, fp);
         fclose(fp);
 
         // Write MAC String
