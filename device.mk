@@ -15,20 +15,22 @@
 #
 
 # overlays
+
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay vendor/extra/overlays/phone-1080p
 
 # Haters gonna hate..
 PRODUCT_CHARACTERISTICS := nosdcard
 
 # Ramdisk
-PRODUCT_PACKAGES += \
-    libinit_bacon \
-    fstab.bacon \
-    init.bacon.rc \
-    init.qcom.usb.rc \
-    ueventd.bacon.rc
+# PRODUCT_PACKAGES += \
+#   libinit_bacon \
+#   fstab.bacon \
+#   init.bacon.rc \
+#   init.qcom.usb.rc \
+#   ueventd.bacon.rc
 
 # For Ubuntu Touch
+# device/oneplus/bacon/configs-ubuntu/init.qcom.usb.rc:root/init.qcom.usb.rc
 
 PRODUCT_COPY_FILES += \
 	device/oppo/msm8974-common/wifi/WCNSS_cfg.dat:system/vendor/firmware/wlan/prima/WCNSS_cfg.dat \
@@ -36,23 +38,23 @@ PRODUCT_COPY_FILES += \
 	device/oppo/msm8974-common/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/wifi/WCNSS_qcom_wlan_nv.bin
 
 PRODUCT_COPY_FILES += \
-	device/oneplus/bacon/configs-ubuntu/fstab.bacon:root/fstab.bacon\
 	device/oneplus/bacon/configs-ubuntu/init.bacon.rc:root/init.bacon.rc \
-	device/oneplus/bacon/configs-ubuntu/init.qcom-common.rc:root/init.qcom-common.rc
-#	device/oneplus/bacon/configs-ubuntu/init_wlan.sh:root/etc/init_wlan.sh \
-#	device/oneplus/bacon/configs-ubuntu/init.bacon.wifi.sh:root/etc/init.bacon.wifi.sh
-
-#	device/oneplus/bacon/configs-ubuntu/init.qcom.usb.rc:root/init.qcom.usb.rc
-#	device/oneplus/bacon/configs-ubuntu/ueventd.qcom.rc:root/ueventd.qcom.rc \
-#	device/oneplus/bacon/configs-ubuntu/init.qcom.bt.sh:root/init.qcom.bt.sh \
-#	device/oneplus/bacon/configs-ubuntu/ueventd.qcom.rc:root/ueventd.qcom.rc \
-
-#	device/oneplus/bacon/configs-ubuntu/init.qcom.bt.sh:root/etc/init.qcom.bt.sh
+	device/oneplus/bacon/configs-ubuntu/ueventd.qcom.rc:root/ueventd.qcom.rc \
+	device/oneplus/bacon/configs-ubuntu/fstab.bacon:root/fstab.bacon \
+	device/oneplus/bacon/configs-ubuntu/init.qcom-common.rc:root/init.qcom-common.rc \
+	device/oneplus/bacon/configs-ubuntu/init.qcom.bt.sh:root/system/etc/init.qcom.bt.sh \
+	device/oneplus/bacon/configs-ubuntu/init_wlan.sh:root/system/etc/init_wlan.sh \
+	device/oneplus/bacon/configs-ubuntu/init.bacon.wifi.sh:root/system/etc/init.bacon.wifi.sh \
+	device/oneplus/bacon/configs-ubuntu/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
+	device/oneplus/bacon/configs-ubuntu/init_wlan.sh:system/etc/init_wlan.sh \
+	device/oneplus/bacon/configs-ubuntu/init.bacon.wifi.sh:system/etc/init.bacon.wifi.sh
 
 
 # Audio
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml
+
+
 
 # Keylayouts
 PRODUCT_PACKAGES += \
@@ -65,6 +67,9 @@ PRODUCT_PACKAGES += \
     Tag \
     nfc_nci.bacon \
     com.android.nfc_extras
+
+PRODUCT_PACKAGES += \
+    conn_init
 
 # NFC access control + feature files + configuration
 PRODUCT_COPY_FILES += \
