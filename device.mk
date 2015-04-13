@@ -21,21 +21,20 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay vendor/extra/overlays/phone-108
 # Haters gonna hate..
 PRODUCT_CHARACTERISTICS := nosdcard
 
-# Ramdisk
-# PRODUCT_PACKAGES += \
-#   libinit_bacon \
-#   fstab.bacon \
-#   init.bacon.rc \
-#   init.qcom.usb.rc \
-#   ueventd.bacon.rc
-
-# For Ubuntu Touch
-# device/oneplus/bacon/configs-ubuntu/init.qcom.usb.rc:root/init.qcom.usb.rc
+# For Ubuntu Touch 
 
 PRODUCT_COPY_FILES += \
 	device/oppo/msm8974-common/wifi/WCNSS_cfg.dat:system/vendor/firmware/wlan/prima/WCNSS_cfg.dat \
 	device/oppo/msm8974-common/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
 	device/oppo/msm8974-common/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/wifi/WCNSS_qcom_wlan_nv.bin
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf
+
+PRODUCT_COPY_FILES += \
+	device/oppo/msm8974-common/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/primaWCNSS_cfg.dat \
+	device/oppo/msm8974-common/wifi/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini \
+	device/oppo/msm8974-common/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
 PRODUCT_COPY_FILES += \
 	device/oneplus/bacon/configs-ubuntu/init.bacon.rc:root/init.bacon.rc \
@@ -47,6 +46,7 @@ PRODUCT_COPY_FILES += \
 	device/oneplus/bacon/configs-ubuntu/init.bacon.wifi.sh:root/system/etc/init.bacon.wifi.sh \
 	device/oneplus/bacon/configs-ubuntu/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
 	device/oneplus/bacon/configs-ubuntu/init_wlan.sh:system/etc/init_wlan.sh \
+        device/oneplus/bacon/configs-ubuntu/init.qcom.usb.rc:root/init.qcom.usb.rc \
 	device/oneplus/bacon/configs-ubuntu/init.bacon.wifi.sh:system/etc/init.bacon.wifi.sh
 
 
@@ -86,6 +86,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # call the proprietary setup
 $(call inherit-product-if-exists, vendor/oneplus/bacon/bacon-vendor.mk)
+$(call inherit-product, device/oneplus/bacon/mdt.mk)
 
 ifneq ($(QCPATH),)
 $(call inherit-product-if-exists, $(QCPATH)/prebuilt_HY11/target/product/msm8974/prebuilt.mk)

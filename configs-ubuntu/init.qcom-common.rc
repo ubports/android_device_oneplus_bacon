@@ -555,6 +555,22 @@ service qrngp /system/bin/qrngp
     oneshot
     disabled
 
+service wcnss_init /system/bin/sh /system/etc/init.bacon.wifi.sh
+    class main
+    user system
+    group system wifi
+    oneshot
+
+service init_wlan /system/bin/sh /system/etc/init_wlan.sh
+    class late_start
+    user root
+    group root
+    disabled
+    oneshot
+
+on property:init.svc.wcnss_init=stopped
+    start init_wlan
+
 on property:sys.boot_completed=1
     start qrngp
     write /sys/devices/virtual/graphics/fb0/panel_calibration 1
